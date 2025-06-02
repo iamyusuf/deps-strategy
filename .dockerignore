@@ -1,0 +1,26 @@
+# Node modules and dependencies
+node_modules
+npm-debug.log
+
+# Git and version control
+.git
+.gitignore
+
+# Environment and local config files
+.env
+.env.*
+*.local
+
+# Logs
+logs
+*.log
+
+# Editor directories and files
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS specific
+.DS_Store
+Thumbs.db
