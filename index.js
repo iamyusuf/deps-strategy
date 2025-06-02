@@ -37,7 +37,7 @@ app.get('/healthz', (req, res) => {
 
 // Default route
 app.get('/', (req, res) => {
-  res.send('Kubernetes Probes Example: Use /liveness, /readiness, or /healthz endpoints');
+  res.status(200).json({ status: 'Ok', version: 'v1' });
 });
 
 // Start server
