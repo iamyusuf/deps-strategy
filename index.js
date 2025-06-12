@@ -37,7 +37,7 @@ app.get('/healthz', (req, res) => {
 
 // Default route
 app.get('/', (req, res) => {
-  res.status(200).json({ version: 'Version 1' });
+  res.status(200).json({ version: 'Version 2' });
 });
 
 // Start server
