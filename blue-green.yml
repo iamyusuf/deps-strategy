@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue-deployment
+  labels:
+    app: my-app
+    version: blue
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+      version: blue
+  template:
+    metadata:
+      labels:
+        app: my-app
+        version: blue
+    spec:
+      containers:
+      - name: my-app
+        image: iamyusuf/my-app:v1
+        ports:
+        - containerPort: 3000
+        readinessProbe:
+          httpGet:
+            path: /readiness
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: green-deployment
+  labels:
+    app: my-app
+    version: green
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+      version: green
+  template:
+    metadata:
+      labels:
+        app: my-app
+        version: green
+    spec:
+      containers:
+      - name: my-app
+        image: iamyusuf/my-app:v2
+        ports:
+        - containerPort: 3000
+        readinessProbe:
+          httpGet:
+            path: /readiness
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-app-service
+spec:
+  selector:
+    app: my-app
+    version: blue    # Initially points to blue deployment
+  ports:
+  - port: 80
+    targetPort: 3000
+  type: ClusterIP
+---
+# To switch to green deployment, apply this service update
+# Save this part separately and apply when ready to switch
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: my-app-service
+#   annotations:
+#     kubernetes.io/change-cause: "Switch to green deployment"
+# spec:
+#   selector:
+#     app: my-app
+#     version: green   # Switch to green deployment
+#   ports:
+#   - port: 80
+#     targetPort: 3000
+#   type: ClusterIP
