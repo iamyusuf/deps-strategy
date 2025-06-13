@@ -58,6 +58,7 @@ spec:
       containers:
       - name: my-app
         image: iamyusuf/my-app:v2
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000
         readinessProbe:
@@ -102,3 +103,24 @@ spec:
 #   - port: 80
 #     targetPort: 3000
 #   type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: blue-green-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: my-app.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: my-app-service
+            port:
+              number: 80
+---
