@@ -20,6 +20,7 @@ spec:
       containers:
       - name: my-app
         image: iamyusuf/my-app:v1
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3000
         readinessProbe:
